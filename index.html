@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jujutsu Kaisen TTRPG Charactermancer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Unica+One&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #1a1a1a; color: #e0e0e0; }
+        h1, h2, h3, .font-title { font-family: 'Unica One', cursive; }
+        .cracked-bg { position: relative; }
+        .cracked-bg::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: linear-gradient(to right, rgba(0,0,0,0.7) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.7) 1px, transparent 1px);
+            background-size: 5px 5px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        input[type="range"]::-webkit-slider-thumb { background-color: #ef4444; border-radius: 9999px; cursor: pointer; }
+        input[type="range"]::-moz-range-thumb { background-color: #ef4444; border-radius: 9999px; cursor: pointer; }
+    </style>
+</head>
+<body class="text-gray-200">
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center py-8">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-[#ef4444] tracking-widest font-title">呪術廻戦 TTRPG</h1>
+            <p class="mt-2 text-lg text-gray-400 max-w-2xl mx-auto font-title">Character Creation</p>
+        </header>
+
+        <main class="space-y-16">
+            <section id="step1" class="bg-[#262626] rounded-xl shadow-lg p-8 cracked-bg border-t-4 border-[#8b5cf6]">
+                <h2 class="text-3xl font-bold font-title text-[#ef4444] mb-4">1. Attributes & Stats</h2>
+                <p class="text-gray-400 mb-6">Allocate 15 points to your attributes. No single attribute can exceed 4. Your derived stats will be calculated automatically.</p>
+                
+                <div id="points-display" class="text-center mb-6">
+                    <span class="text-4xl font-title text-green-400">15</span>
+                    <p class="text-sm text-gray-500">Points Remaining</p>
+                </div>
+
+                <div id="attribute-sliders" class="space-y-6">
+                    <!-- Sliders will be injected here -->
+                </div>
+
+                <div id="derived-stats" class="mt-8 grid grid-cols-2 gap-4 text-center">
+                    <div class="bg-[#1a1a1a] p-3 rounded border border-[#8b5cf6]">
+                        <span class="block text-2xl font-bold font-title text-[#ef4444]" id="ce-pool">0</span>
+                        <p class="text-xs text-gray-400">Cursed Energy Pool</p>
+                    </div>
+                    <div class="bg-[#1a1a1a] p-3 rounded border border-[#ef4444]">
+                        <span class="block text-2xl font-bold font-title text-[#ef4444]" id="hp-pool">0</span>
+                        <p class="text-xs text-gray-400">HP</p>
+                    </div>
+                    <div class="bg-[#1a1a1a] p-3 rounded border border-[#ef4444]">
+                        <span class="block text-2xl font-bold font-title text-[#ef4444]" id="endurance-pool">0</span>
+                        <p class="text-xs text-gray-400">Endurance</p>
+                    </div>
+                    <div class="bg-[#1a1a1a] p-3 rounded border border-[#ef4444]">
+                        <span class="block text-2xl font-bold font-title text-[#ef4444]" id="composure-pool">0</span>
+                        <p class="text-xs text-gray-400">Composure</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step2" class="bg-[#262626] rounded-xl shadow-lg p-8 cracked-bg border-t-4 border-[#ef4444]">
+                <h2 class="text-3xl font-bold font-title text-[#ef4444] mb-4">2. Archetype</h2>
+                <p class="text-gray-400 mb-6">Choose an archetype that defines your character's role and grants them a bonus talent and starting proficiencies. This choice also affects how your Cursed Energy is calculated.</p>
+                <div id="archetype-grid" class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Archetype cards will be injected here -->
+                </div>
+            </section>
+
+            <section id="step3" class="bg-[#262626] rounded-xl shadow-lg p-8 cracked-bg border-t-4 border-[#8b5cf6]">
+                <h2 class="text-3xl font-bold font-title text-[#ef4444] mb-4">3. Talents & Hindrances</h2>
+                <p class="text-gray-400 mb-6">Customize your character's strengths and weaknesses. You start with 5 points for Talents and can gain more by taking on Hindrances.</p>
+                
+                <div id="talent-points-display" class="text-center mb-6">
+                    <span class="text-4xl font-title text-green-400">5</span>
+                    <p class="text-sm text-gray-500">Talent Points Remaining</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-title text-[#8b5cf6] mb-4">Talents</h3>
+                        <input type="text" id="talent-search" placeholder="Search talents..." class="w-full p-3 mb-4 border border-[#8b5cf6] bg-[#1a1a1a] rounded-lg">
+                        <div id="talent-list" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+                            <!-- Talents will be injected here -->
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-title text-[#ef4444] mb-4">Hindrances</h3>
+                        <input type="text" id="hindrance-search" placeholder="Search hindrances..." class="w-full p-3 mb-4 border border-[#ef4444] bg-[#1a1a1a] rounded-lg">
+                        <div id="hindrance-list" class="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+                             <!-- Hindrances will be injected here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="step4" class="bg-[#262626] rounded-xl shadow-lg p-8 cracked-bg border-t-4 border-[#8b5cf6]">
+                <h2 class="text-3xl font-bold font-title text-[#ef4444] mb-4">4. Summary</h2>
+                <p class="text-gray-400 mb-6">Review your final character sheet. Copy this information to a separate document to save it.</p>
+                <div id="character-summary" class="bg-[#1a1a1a] p-6 rounded border border-[#8b5cf6] whitespace-pre-wrap font-mono text-sm">
+                    <!-- Summary will be generated here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const ATTRIBUTES = ["Strength", "Dexterity", "Constitution", "Intelligence", "Charisma", "Spirit"];
+        const STARTING_POINTS = 15;
+        const STARTING_TALENT_POINTS = 5;
+
+        const archetypesData = [
+            { name: "Vanguard", desc: "A front-line fighter who excels in close-quarters combat.", talent: "Hardened Body", attr: "Strength", talentDesc: "When you take damage, you may spend 1 point of Cursed Energy to reduce the damage by an amount equal to your **Constitution** score." },
+            { name: "Tactician", desc: "A strategic sorcerer who uses their mind to outsmart opponents.", talent: "Cursed Chessmaster", attr: "Intelligence", talentDesc: "Once per combat, you may spend 3 points of Cursed Energy to gain an additional action. You may use this action to give a verbal command to an ally, granting them advantage on their next roll." },
+            { name: "Exorcist", desc: "A specialist in dealing with Cursed Spirits.", talent: "Spirit Sense", attr: "Intelligence", talentDesc: "You can spend 2 Cursed Energy to pinpoint the location of the nearest Cursed Spirit within a 50-meter radius, even through walls or barriers." },
+            { name: "Support", desc: "A sorcerer who focuses on bolstering allies and hindering enemies.", talent: "Soul Link", attr: "Charisma", talentDesc: "You can spend a point of Cursed Energy to either grant an ally 2 points of Cursed Energy or heal them for 2 HP." },
+            { name: "Infiltrator", desc: "A stealthy sorcerer who excels at getting into restricted areas.", talent: "Ghost Step", attr: "Dexterity", talentDesc: "You may spend 2 Cursed Energy to turn your Cursed Energy signature into a whisper, allowing you to automatically succeed on your next Stealth roll to avoid detection by Cursed Spirits." },
+            { name: "Cursed Tool Master", desc: "A warrior who has a symbiotic relationship with their weapon.", talent: "Symbiotic Tool", attr: "Strength or Dexterity", talentDesc: "Your main Cursed Tool's durability is now tied to your HP. When your Cursed Tool is broken, you can heal it by spending Cursed Energy at a rate of 1 CE per 1 durability point. You can sense your Cursed Tool's location at any time as long as you are within 1 mile." },
+            { name: "Curse Manipulator", desc: "A rare sorcerer who can capture and control Cursed Spirits.", talent: "Spirit Synthesis", attr: "Charisma", talentDesc: "When you have successfully captured two Cursed Spirits, you may spend 10 Cursed Energy to merge them into a new, more powerful Cursed Spirit. This new spirit's stats are a combination of the two fused spirits." },
+            { name: "Barrier User", desc: "A sorcerer who specializes in creating and manipulating barriers.", talent: "Domain Weaver", attr: "Intelligence", talentDesc: "You can spend 5 Cursed Energy to either create a simple, stationary barrier that takes 2 hits to destroy, or to weaken a pre-existing barrier, granting you advantage on your next attempt to pass through it." },
+            { name: "Unarmed Fighter", desc: "A martial artist who fights with only their fists.", talent: "Resonance Strike", attr: "Strength", talentDesc: "When you land a successful unarmed attack, you may spend 2 Cursed Energy to force your opponent to make a **Medium Constitution** roll. If they fail, they lose 2 points of Cursed Energy." },
+            { name: "Healer", desc: "A sorcerer who is a master of Reverse Cursed Technique.", talent: "Rapid Restoration", attr: "Constitution", talentDesc: "You may now heal a target as a single action, rather than an entire turn. You may also spend 5 Cursed Energy to heal a target for a number of HP equal to your **Spirit** score." },
+            { name: "Hunter", desc: "A sorcerer who specializes in hunting Cursed Spirits.", talent: "Hunter's Intuition", attr: "Dexterity", talentDesc: "You gain advantage on **Perception** rolls to detect ambushes or traps. Once per session, you can reroll a failed tracking or Perception roll." },
+            { name: "Gambler", desc: "A sorcerer who uses randomness to their advantage.", talent: "Cursed Dice", attr: "Spirit", talentDesc: "When you fail a roll, you may declare 'double or nothing' to reroll the dice. If you succeed, you may use the new roll. If you fail or get the same result, you automatically fumble." },
+            { name: "Scholar", desc: "A sorcerer who uses their vast knowledge to defeat their enemies.", talent: "Information Broker", attr: "Intelligence", talentDesc: "When you encounter a Cursed Spirit for the first time, you may spend a point of Cursed Energy to ask the GM for one piece of information about it, such as its name, its Cursed Technique, or a major weakness." },
+            { name: "Binding Vow Specialist", desc: "A sorcerer who draws power from promises and rules.", talent: "Binding Vow Master", attr: "Spirit", talentDesc: "When you create a Binding Vow, you may increase the bonus you gain from it by 50%. The drawback of the vow is also increased by 50%." },
+            { name: "Puppeteer", desc: "A sorcerer who controls inanimate objects as weapons.", talent: "Puppet Golem", attr: "Dexterity", talentDesc: "You can spend 5 Cursed Energy to animate a large, inanimate object (e.g., a car, a statue, a golem) for a single round. The animated object has a movement rate of 10 and a Strength score equal to your Intelligence score." },
+            { name: "Heavenly Restricted", desc: "A non-sorcerer whose physical body has been perfected.", talent: "Heavenly Restriction", attr: "N/A", talentDesc: "You have no CE Pool and cannot learn Cursed Techniques. You gain 3 additional Attribute points to allocate. You may also choose one Combat skill and one General skill and increase their proficiency by one rank. You have disadvantage on all **Charisma** rolls with jujutsu sorcerers." }
+        ];
+
+        const talentsData = [
+            { name: "Six Eyes", cost: 10, desc: "Perceive CE flow in extreme detail. Advantage on all CE rolls. Can spend CE to see past/future of an item/location on a successful Spirit roll." },
+            { name: "Limitless", cost: 10, desc: "Perfect understanding of space. Can use CE for various feats (healing, barriers, enhancement). +2 bonus to all CE rolls." },
+            { name: "Black Flash", cost: 8, desc: "On a CE attack hit, succeed a Dexterity roll to deal an additional damage die." },
+            { name: "Reverse Cursed Technique", cost: 7, desc: "Heal yourself by spending 1 CE for 1 HP. Usable a number of times equal to your Spirit score per day." },
+            { name: "Binding Vow - Perfected", cost: 6, desc: "A perfect Binding Vow provides a massive, permanent bonus (e.g., +5 to a CE roll) with a major life impact." },
+            { name: "Innate Domain", cost: 6, desc: "Gain a bonus to your roll to activate a Domain Expansion. Can create small, temporary domains." },
+            { name: "Cursed Energy Aura", cost: 5, desc: "Spend 2 CE to force Cursed Spirits to make a Spirit roll to approach you. +2 to Charisma rolls." },
+            { name: "Quick Healer", cost: 5, desc: "When taking damage, roll a d3 and subtract it from the damage taken. Doesn't work on all attacks." },
+            { name: "Intuitive Fighting", cost: 5, desc: "Once per scene, reroll a failed combat roll. Usable a number of times equal to your Dexterity score per day. +2 to all combat rolls." },
+            { name: "Cursed Energy Battery", cost: 5, desc: "+10 bonus to your Total Cursed Energy Pool." },
+            { name: "Talisman Crafter", cost: 4, desc: "Imbue paper talismans with basic CE effects. Cost to create is reduced by 25%." },
+            { name: "High Pain Tolerance", cost: 4, desc: "+2 bonus to Constitution or Spirit rolls to resist torture, pain, or fear. Ignore penalties equal to your Constitution score per day." },
+            { name: "Expert Tracker", cost: 4, desc: "+2 bonus to Perception and Intelligence rolls for tracking Cursed Spirits." },
+            { name: "Strategic Mind", cost: 4, desc: "+2 bonus to Intelligence rolls for planning and strategy." },
+            { name: "Resourceful", cost: 3, desc: "Spend 1 CE to gain a valuable piece of information or a +1 bonus to a roll." },
+            { name: "Reinforce", cost: 3, desc: "Spend 2 CE to add a +1 bonus to an ally's next roll. Usable a number of times equal to your Charisma score per day." },
+            { name: "Spirit Sense", cost: 3, desc: "Sense Cursed Spirits in your vicinity. Can use CE to extend this range." },
+            { name: "Ghost Step", cost: 3, desc: "Spend 2 CE to become invisible to Cursed Spirits for 1 round." },
+            { name: "Cursed Energy Absorption", cost: 3, desc: "Regain a small amount of CE on a successful CE roll (difficulty 15)." },
+            { name: "Cursed Energy Conversion", cost: 3, desc: "Convert HP to CE (e.g., 3 HP for 1 CE)." },
+        ];
+        const hindrancesData = [
+            { name: "Cursed Vessel", cost: 10, desc: "Vessel for a powerful Cursed Spirit. On major wound/emotional vulnerability, risk the Spirit taking over." },
+            { name: "Binding Vow", cost: 10, desc: "Bound by a major, life-impacting vow. Breaking it causes a permanent, severe penalty." },
+            { name: "Cursed Energy Sickness", cost: 8, desc: "Become physically ill after using large amounts of CE. Risk disadvantage on all rolls for 10 minutes." },
+            { name: "Corrupted Cursed Energy", cost: 8, desc: "Take damage to your CE Pool whenever you use your Cursed Technique. Difficulty of CE rolls is increased." },
+            { name: "Unruly Cursed Technique", cost: 7, desc: "Your Cursed Technique is not fully controlled and can go haywire." },
+            { name: "Psychic Trauma", cost: 6, desc: "Witnessed a horrifying event. Risk losing 1d6 Composure when encountering terrifying scenes. Disadvantage on Charisma/Perception." },
+            { name: "Target of a Clan", cost: 6, desc: "Hunted by a major sorcerer clan. Risk being recognized and pursued in major cities." },
+            { name: "Fragile Body", cost: 5, desc: "Take an additional 1 damage from all sources. Disadvantage on Constitution and Athletics rolls." },
+            { name: "Obsessive Compulsive Disorder", cost: 5, desc: "Must succeed a Spirit roll to act against a specific compulsion, or suffer a penalty." },
+            { name: "Maimed", cost: 4, desc: "Permanent injury (lost limb/eye). -2 penalty to relevant rolls." },
+            { name: "Death Wish", cost: 4, desc: "Must succeed a Spirit roll to flee from combat. Cannot use CE to avoid certain death." },
+            { name: "Night Terrors", cost: 4, desc: "Risk starting each session with disadvantage on all rolls due to bad dreams." },
+            { name: "Bloodthirsty", cost: 3, desc: "Must succeed a Spirit roll to not kill a person." },
+            { name: "Phobia", cost: 2, desc: "Severe phobia of something specific. Risk losing 1d4 Composure when encountering it." },
+            { name: "Greedy", cost: 2, desc: "Incredibly reluctant to part with money or items, and will always try to haggle." },
+            { name: "Hubris", cost: 2, desc: "Lose 1d6 Composure when fleeing from combat." },
+            { name: "Sensitive Constitution", cost: 1, desc: "More susceptible to poisons, diseases, and weather." },
+            { name: "Illiterate", cost: 1, desc: "Cannot read or write." },
+        ];
+        
+        let currentAttributes = { Strength: 1, Dexterity: 1, Constitution: 1, Intelligence: 1, Charisma: 1, Spirit: 1 };
+        let pointsRemaining = STARTING_POINTS - 6;
+        let selectedArchetype = null;
+        let selectedTalents = [];
+        let selectedHindrances = [];
+        let talentPoints = STARTING_TALENT_POINTS;
+
+        const pointsDisplay = document.getElementById('points-display').querySelector('span');
+        const cePool = document.getElementById('ce-pool');
+        const hpPool = document.getElementById('hp-pool');
+        const endurancePool = document.getElementById('endurance-pool');
+        const composurePool = document.getElementById('composure-pool');
+        const attributeSliders = document.getElementById('attribute-sliders');
+        const archetypeGrid = document.getElementById('archetype-grid');
+        const talentPointsDisplay = document.getElementById('talent-points-display').querySelector('span');
+        const talentList = document.getElementById('talent-list');
+        const hindranceList = document.getElementById('hindrance-list');
+        const summaryDiv = document.getElementById('character-summary');
+        
+        function updatePointsDisplay() {
+            pointsDisplay.textContent = pointsRemaining;
+            pointsDisplay.className = `text-4xl font-title ${pointsRemaining >= 0 ? 'text-green-400' : 'text-red-400'}`;
+        }
+
+        function updateStats() {
+            let strength = currentAttributes.Strength;
+            let constitution = currentAttributes.Constitution;
+            let spirit = currentAttributes.Spirit;
+            let ceAttr = selectedArchetype ? selectedArchetype.attr : null;
+            let ceValue = 'N/A';
+            if (ceAttr && ceAttr !== 'N/A') {
+                const ceBonusAttr = ceAttr === 'Strength or Dexterity' ? Math.max(currentAttributes.Strength, currentAttributes.Dexterity) : currentAttributes[ceAttr];
+                ceValue = (spirit + ceBonusAttr) * 2;
+            }
+            
+            cePool.textContent = ceValue;
+            hpPool.textContent = (strength + constitution) * 5;
+            endurancePool.textContent = constitution * 3;
+            composurePool.textContent = spirit * 3;
+            
+            updateSummary();
+        }
+
+        function renderSliders() {
+            attributeSliders.innerHTML = '';
+            ATTRIBUTES.forEach(attr => {
+                const sliderDiv = document.createElement('div');
+                sliderDiv.className = 'grid grid-cols-5 gap-4 items-center';
+                const lowerCaseAttr = attr.toLowerCase();
+                sliderDiv.innerHTML = `
+                    <label for="${lowerCaseAttr}-slider" class="col-span-2 font-bold text-[#ef4444]">${attr}</label>
+                    <input type="range" id="${lowerCaseAttr}-slider" min="1" max="4" value="${currentAttributes[attr]}" class="col-span-2 accent-[#8b5cf6] h-2 rounded-lg cursor-pointer">
+                    <span id="${lowerCaseAttr}-value" class="col-span-1 text-center font-title text-xl text-[#8b5cf6]">${currentAttributes[attr]}</span>
+                `;
+                attributeSliders.appendChild(sliderDiv);
+                
+                const slider = document.getElementById(`${lowerCaseAttr}-slider`);
+                slider.addEventListener('input', (e) => {
+                    const newValue = parseInt(e.target.value);
+                    const oldValue = currentAttributes[attr];
+                    const difference = newValue - oldValue;
+
+                    if (pointsRemaining - difference >= 0) {
+                        currentAttributes[attr] = newValue;
+                        pointsRemaining -= difference;
+                        document.getElementById(`${lowerCaseAttr}-value`).textContent = newValue;
+                        updatePointsDisplay();
+                        updateStats();
+                    } else {
+                        e.target.value = oldValue;
+                    }
+                });
+            });
+        }
+
+        function renderArchetypes() {
+            archetypeGrid.innerHTML = '';
+            archetypesData.forEach(arch => {
+                const card = document.createElement('div');
+                card.className = 'bg-[#1a1a1a] p-4 rounded border border-gray-700 cursor-pointer hover:bg-[#2f2f2f] transition-colors duration-200 archetype-card';
+                card.innerHTML = `
+                    <h3 class="text-xl font-bold font-title text-[#ef4444]">${arch.name}</h3>
+                    <p class="text-sm text-gray-400 mt-1">${arch.desc}</p>
+                    <div class="mt-2 text-xs space-y-1">
+                         <p class="text-gray-400"><strong class="text-[#8b5cf6]">CE Attribute:</strong> ${arch.attr}</p>
+                         <p class="text-gray-400"><strong class="text-[#8b5cf6]">Bonus Talent:</strong> ${arch.talent}</p>
+                         <p class="text-gray-400"><strong class="text-[#8b5cf6]">Talent Description:</strong> ${arch.talentDesc}</p>
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.archetype-card').forEach(c => c.classList.remove('border-[#ef4444]', 'border-2'));
+                    card.classList.add('border-[#ef4444]', 'border-2');
+                    selectedArchetype = arch;
+                    updateStats();
+                });
+                archetypeGrid.appendChild(card);
+            });
+        }
+        
+        function updateTalentPoints() {
+            let totalCost = selectedTalents.reduce((sum, t) => sum + t.cost, 0);
+            let totalGained = selectedHindrances.reduce((sum, h) => sum + h.cost, 0);
+            talentPoints = STARTING_TALENT_POINTS - totalCost + totalGained;
+            talentPointsDisplay.textContent = talentPoints;
+            talentPointsDisplay.className = `text-4xl font-title ${talentPoints >= 0 ? 'text-green-400' : 'text-red-400'}`;
+            updateSummary();
+        }
+
+        function renderTraits() {
+            talentList.innerHTML = '';
+            talentsData.forEach(t => {
+                const item = document.createElement('div');
+                item.className = 'bg-[#2f2f2f] p-3 rounded-md shadow-sm border-l-4 border-green-500 talent-item cursor-pointer';
+                item.innerHTML = `<p class="font-semibold text-gray-100">${t.name} <span class="text-sm font-mono text-green-400">(${t.cost} pts)</span></p><p class="text-sm text-gray-400">${t.desc}</p>`;
+                item.addEventListener('click', () => {
+                    const index = selectedTalents.findIndex(st => st.name === t.name);
+                    if (index > -1) {
+                        selectedTalents.splice(index, 1);
+                        item.classList.remove('border-2', 'border-green-400');
+                    } else {
+                        selectedTalents.push(t);
+                        item.classList.add('border-2', 'border-green-400');
+                    }
+                    updateTalentPoints();
+                });
+                talentList.appendChild(item);
+            });
+
+            hindranceList.innerHTML = '';
+            hindrancesData.forEach(h => {
+                const item = document.createElement('div');
+                item.className = 'bg-[#2f2f2f] p-3 rounded-md shadow-sm border-l-4 border-red-500 hindrance-item cursor-pointer';
+                item.innerHTML = `<p class="font-semibold text-gray-100">${h.name} <span class="text-sm font-mono text-red-400">(${h.cost} pts)</span></p><p class="text-sm text-gray-400">${h.desc}</p>`;
+                item.addEventListener('click', () => {
+                    const index = selectedHindrances.findIndex(sh => sh.name === h.name);
+                    if (index > -1) {
+                        selectedHindrances.splice(index, 1);
+                        item.classList.remove('border-2', 'border-red-400');
+                    } else {
+                        selectedHindrances.push(h);
+                        item.classList.add('border-2', 'border-red-400');
+                    }
+                    updateTalentPoints();
+                });
+                hindranceList.appendChild(item);
+            });
+        }
+        
+        function updateSummary() {
+            const summaryText = `--- CHARACTER SUMMARY ---\n\n` +
+                               `Archetype: ${selectedArchetype ? selectedArchetype.name : 'None'}\n\n` +
+                               `Attributes:\n` +
+                               ATTRIBUTES.map(attr => `- ${attr}: ${currentAttributes[attr]}`).join('\n') +
+                               `\n\nDerived Stats:\n` +
+                               `- HP: ${hpPool.textContent}\n` +
+                               `- Cursed Energy: ${cePool.textContent}\n` +
+                               `- Endurance: ${endurancePool.textContent}\n` +
+                               `- Composure: ${composurePool.textContent}\n\n` +
+                               `Talent Points Remaining: ${talentPoints}\n\n` +
+                               `Selected Talents:\n` +
+                               (selectedTalents.length > 0 ? selectedTalents.map(t => `- ${t.name} (${t.cost} pts)`).join('\n') : '- None') +
+                               `\n\nSelected Hindrances:\n` +
+                               (selectedHindrances.length > 0 ? selectedHindrances.map(h => `- ${h.name} (${h.cost} pts)`).join('\n') : '- None');
+            
+            summaryDiv.textContent = summaryText;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSliders();
+            renderArchetypes();
+            renderTraits();
+            updatePointsDisplay();
+            updateStats();
+            updateTalentPoints();
+        });
+    </script>
+</body>
+</html>
